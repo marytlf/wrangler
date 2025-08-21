@@ -44,6 +44,11 @@ func (m *Manager) Start(ctx context.Context) {
 }
 
 // OnLeaderOrDie this function will be called when leadership is acquired or die if failed
+// name = origin from where the function is being called ("file_name-function" or "file_name-function::additional_context")
+// if OnLeaderOrDie is called more than once by the same origin, add an additional context to the name
+// (eg, "rancher-start::dashboarddata")
+// if OnLeaderOrDie is called only once inform the origin
+// (eg,"nodedriver-register")
 func (m *Manager) OnLeaderOrDie(name string, f func(ctx context.Context) error) {
 	go func() {
 		<-m.leaderChan
